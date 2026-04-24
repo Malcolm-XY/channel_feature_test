@@ -1,0 +1,17 @@
+Training settings:
+
+normalization_for_trining = False
+
+Fusion settings:
+
+original PCC, PLV, PLI: no normalization settings; (means default to unnormalized)
+Additive fusion: normalization_basis = True, normalization_modifier: False; (PCC: normalized, PLV/PLI: unnormalized)
+Multiplicative fusion: normalization_basis = False, normalization_modifier: False
+Triangle blocking: normalization_basis = False, normalization_modifier: False
+Diagonal blocking: normalization_basis = False, normalization_modifier: False
+
+proposed PC-AEC:
+1. normalization_basis = False, normalization_modifier: False
+2. normalization_basis = True, normalization_modifier: False; (PCC: normalized, PLV/PLI: unnormalized)
+However variant 2 is superior (proved in case of PCC x S(PLV), 20250408)
+best practice for PCCxSigmoid(PLV): k=Heaviside, tau=30 (20260411)
