@@ -21,12 +21,12 @@ def svm_validation_compact(dataset, identifier, feature_type="psd", ratio_train=
     
     # Label
     if dataset.lower() == "seed":
-        label = utils_feature_loading.read_labels(dataset, header=True)["valence"]
+        labels = utils_feature_loading.read_labels(dataset, header=True)["valence"]
     elif dataset.lower() == "dreamer":    
-        label = utils_feature_loading.read_labels(dataset, header=True)[category]
+        labels = utils_feature_loading.read_labels(dataset, header=True)[category]
     
     # Classification
-    acc, confusion_matrix_, report = svm_validation(samples, label, ratio_train)
+    acc, confusion_matrix_, report = svm_validation(samples, labels, ratio_train)
     summary = {
         "accuracy": acc,
         "confusion_matrix": confusion_matrix_,
@@ -57,15 +57,15 @@ def svm_validation_compact_circle(feature_type, subject_range=range(6,16), exper
     
     return accuracy_avg, summary_results
 
-def svm_validation(feature, label, ratio_train=0.7):
-    indices_train = list(range(0,int(np.ceil(ratio_train * len(feature))),1))
-    indices_test = list(range(int(np.ceil(ratio_train * len(feature))), int(len(feature)), 1))
+def svm_validation(samples, labels, ratio_train=0.7):
+    indices_train = list(range(0,int(np.ceil(ratio_train * len(samples))),1))
+    indices_test = list(range(int(np.ceil(ratio_train * len(samples))), int(len(samples)), 1))
 
-    feature_train = feature[indices_train]
-    feature_test = feature[indices_test]
+    samples_train = samples[indices_train]
+    samples_test = samples[indices_test]
 
-    label_train = label[indices_train]
-    label_test = label[indices_test]
+    labels_train = labels[indices_train]
+    labels_test = labels[indices_test]
     
     # =========================
     # SVM training and classification
@@ -80,20 +80,20 @@ def svm_validation(feature, label, ratio_train=0.7):
         ))
     ])
 
-    svm_model.fit(feature_train, label_train)
+    svm_model.fit(samples_train, labels_train)
 
-    label_pred = svm_model.predict(feature_test)
+    labels_pred = svm_model.predict(samples_test)
 
 
     # =========================
     # Evaluation
     # =========================
-    acc = accuracy_score(label_test, label_pred)
-    confusion_matrix_ = confusion_matrix(label_test, label_pred)
-    report = classification_report(label_test, label_pred)
+    acc = accuracy_score(labels_test, labels_pred)
+    confusion_matrix_ = confusion_matrix(labels_test, labels_pred)
+    report = classification_report(labels_test, labels_pred)
     
-    print(f"Train samples: {len(feature_train)}")
-    print(f"Test samples : {len(feature_test)}")
+    print(f"Train samples: {len(samples_train)}")
+    print(f"Test samples : {len(samples_test)}")
     print(f"Accuracy     : {acc:.4f}")
 
     print("\nConfusion Matrix:")
@@ -104,5 +104,24 @@ def svm_validation(feature, label, ratio_train=0.7):
     
     return acc, confusion_matrix_, report
 
-# Test
-accuracy_avg, summary_results = svm_validation_compact_circle("de", subject_range=range(6,16))
+# Test; SVM
+# accuracy_avg, summary_results = svm_validation_compact_circle("de", subject_range=range(6,16))
+
+# Test; CNN
+import torch
+import cnn_validation
+
+from models import models
+
+labels = utils_feature_loading.read_labels(dataset="seed", header=True)
+labels = torch.tensor(np.array(labels)).view(-1)
+
+feature = utils_feature_loading.read_cfs("seed", "sub1ex1", "psd")
+alpha, beta, gamma = feature["alpha"], feature["beta"], feature["gamma"]
+samples = np.hstack([alpha,beta,gamma])
+
+# Model
+len_samples, len_features = samples.shape
+cnn_model = models.FC_2layers(input_len=len_features)
+
+result_CM = cnn_validation.cnn_sequential_validation(cnn_model, samples, labels)

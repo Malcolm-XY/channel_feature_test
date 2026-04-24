@@ -408,6 +408,25 @@ class CNN_2layers_adaptive_maxpool_3(nn.Module):
         x = self.fc2(x)
         return x
 
+class FC_2layers(nn.Module):
+    """
+    this model is identified as:
+    2 convolution layers: c1 = c2 = 3, 1
+    1 maxpool layers: p1 = 3, 3
+    1 global maxpool
+    """
+    def __init__(self, input_len=64, num_classes=3):
+        super(FC_2layers, self).__init__()
+
+        # 全连接层
+        self.fc1 = nn.Linear(in_features=input_len, out_features=32)
+        self.fc2 = nn.Linear(in_features=32, out_features=num_classes)
+
+    def forward(self, x):        
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
 # %%  not effective
 class CNN_3layers_adaptive_avgpool_3(nn.Module):
     """

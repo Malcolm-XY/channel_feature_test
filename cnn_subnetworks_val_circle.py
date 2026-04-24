@@ -88,7 +88,7 @@ def cnn_subnetworks_evaluation_circle_original_cm(feature_cm='pcc', normalizatio
     # for traning and testing in CNN
     # labels
     labels = utils_feature_loading.read_labels(dataset='seed', header=True)
-    y = torch.tensor(np.array(labels)).view(-1)
+    y = torch(np.array(labels)).view(-1)
     
     # data and evaluation circle
     all_results_list = []
