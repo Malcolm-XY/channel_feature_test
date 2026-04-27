@@ -105,7 +105,7 @@ def svm_validation(samples, labels, ratio_train=0.7):
     return acc, confusion_matrix_, report
 
 # Test; SVM
-# accuracy_avg, summary_results = svm_validation_compact_circle("de", subject_range=range(6,16))
+accuracy_avg, summary_results = svm_validation_compact_circle("de_lds", subject_range=range(1,2))
 
 # Test; CNN
 import torch
@@ -116,12 +116,44 @@ from models import models
 labels = utils_feature_loading.read_labels(dataset="seed", header=True)
 labels = torch.tensor(np.array(labels)).view(-1)
 
-feature = utils_feature_loading.read_cfs("seed", "sub1ex1", "psd")
+# 
+feature = utils_feature_loading.read_cfs("seed", "sub1ex1", "de_lds")
 alpha, beta, gamma = feature["alpha"], feature["beta"], feature["gamma"]
-samples = np.hstack([alpha,beta,gamma])
+alpha, beta, gamma = [alpha] * 62, [beta] * 62, [gamma] * 62
+alpha, beta, gamma = np.stack(alpha, axis=2), np.stack(beta, axis=2), np.stack(gamma, axis=2)
+samples = np.stack([alpha,beta,gamma], axis=1)
 
 # Model
-len_samples, len_features = samples.shape
-cnn_model = models.FC_2layers(input_len=len_features)
+# len_samples, len_features = samples.shape
+# cnn_model = models.FC_2layers(input_len=len_features)
+cnn_model = models.CNN_2layers_adaptive_maxpool_3()
 
-result_CM = cnn_validation.cnn_sequential_validation(cnn_model, samples, labels)
+result_CM_1 = cnn_validation.cnn_validation(cnn_model, samples, labels)
+
+# 
+feature = utils_feature_loading.read_cfs("seed", "sub1ex2", "de_lds")
+alpha, beta, gamma = feature["alpha"], feature["beta"], feature["gamma"]
+alpha, beta, gamma = [alpha] * 62, [beta] * 62, [gamma] * 62
+alpha, beta, gamma = np.stack(alpha, axis=2), np.stack(beta, axis=2), np.stack(gamma, axis=2)
+samples = np.stack([alpha,beta,gamma], axis=1)
+
+# Model
+# len_samples, len_features = samples.shape
+# cnn_model = models.FC_2layers(input_len=len_features)
+cnn_model = models.CNN_2layers_adaptive_maxpool_3()
+
+result_CM_2 = cnn_validation.cnn_validation(cnn_model, samples, labels)
+
+# 
+feature = utils_feature_loading.read_cfs("seed", "sub1ex3", "de_lds")
+alpha, beta, gamma = feature["alpha"], feature["beta"], feature["gamma"]
+alpha, beta, gamma = [alpha] * 62, [beta] * 62, [gamma] * 62
+alpha, beta, gamma = np.stack(alpha, axis=2), np.stack(beta, axis=2), np.stack(gamma, axis=2)
+samples = np.stack([alpha,beta,gamma], axis=1)
+
+# Model
+# len_samples, len_features = samples.shape
+# cnn_model = models.FC_2layers(input_len=len_features)
+cnn_model = models.CNN_2layers_adaptive_maxpool_3()
+
+result_CM_3 = cnn_validation.cnn_validation(cnn_model, samples, labels)

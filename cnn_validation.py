@@ -125,7 +125,7 @@ def cnn_validation(model, X, y, partition_ratio=0.7, partitioning='sequential',
     if partitioning == 'sequential':
         total_len = len(X_tensor)
         training_len = int(total_len * partition_ratio)
-        testing_len = total_len - training_len
+        # testing_len = total_len - training_len
 
         training_indices = list(range(training_len))
         testing_indices = list(range(training_len, total_len))
@@ -212,51 +212,3 @@ def cnn_cross_validation(model, X, y, folds=5, batch_size=128, epochs=30, learni
 
     print(f"Average Metrics Across {folds} Folds: {avg_metrics}\n")
     return avg_metrics
-
-def cnn_sequential_validation(model, X, y,  ratio_train = 0.7, batch_size=128, epochs=30, learning_rate=0.0005):
-    """
-    Perform k-fold cross-validation on a PyTorch model.
-
-    Parameters:
-        model (torch.nn.Module): The model to evaluate.
-        X (array-like or torch.Tensor): Input data: samples x m x n
-        y (array-like or torch.Tensor): Labels.
-        batch_size (int, optional): Batch size for DataLoader. Default is 128.
-        epochs (int, optional): Number of training epochs. Default is 30.
-        learning_rate (float, optional): Learning rate for the optimizer. Default is 0.0005.
-
-    Returns:
-        dict: A dictionary containing metrics.
-    """
-    X_tensor = torch.as_tensor(X, dtype=torch.float32)
-    y_tensor = torch.as_tensor(y, dtype=torch.long)
-
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f'Running Device: {device}\n')
-    
-    total_len = len(X_tensor)
-    total_len = torch.tensor(total_len)
-    train_len = torch.ceil(total_len * ratio_train).int()
-    
-    train_dataset = TensorDataset(X_tensor[:train_len], y_tensor[:train_len])
-    test_dataset = TensorDataset(X_tensor[train_len:], y_tensor[train_len:])
-    
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
-    
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-    criterion = torch.nn.CrossEntropyLoss()
-    
-    # train and test
-    model = train_model(model, train_loader, device, optimizer, criterion, epochs=epochs)
-    result_metrics = test_model(model, test_loader, device, criterion)
-
-    result = {
-        'accuracy': result_metrics['accuracy'],
-        'f1_score': result_metrics['f1_score'],
-        'loss': result_metrics['loss'],
-        'recall': result_metrics['recall'],
-    }
-
-    print(f"Result Metrices: {result}\n")
-    return result
