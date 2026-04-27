@@ -353,7 +353,7 @@ def normal_evaluation_framework():
         # %% baseline: original functional networks
         cnn_subnetworks_evaluation_circle_original_cm(feature_cm='pcc', # 'pcc', 'plv' or 'pli'
                                                       normalization_for_train=False, # always False
-                                                      subject_range=range(1,2), experiment_range=range(1,4), 
+                                                      subject_range=range(6,16), experiment_range=range(1,4), 
                                                       node_retention_rate=nrr, 
                                                       subnetworks_extract='read', subnetworks_extract_basis=range(1,6),
                                                       partition_ratio=0.7,
@@ -361,7 +361,7 @@ def normal_evaluation_framework():
         
         cnn_subnetworks_evaluation_circle_original_cm(feature_cm='plv', # 'pcc', 'plv' or 'pli'
                                                       normalization_for_train=False, # always False
-                                                      subject_range=range(1,2), experiment_range=range(1,4), 
+                                                      subject_range=range(6,16), experiment_range=range(1,4), 
                                                       node_retention_rate=nrr, 
                                                       subnetworks_extract='read', subnetworks_extract_basis=range(1,6),
                                                       partition_ratio=0.7,
@@ -369,7 +369,7 @@ def normal_evaluation_framework():
                 
         cnn_subnetworks_evaluation_circle_original_cm(feature_cm='pli', # 'pcc', 'plv' or 'pli'
                                                       normalization_for_train=False, # always False
-                                                      subject_range=range(1,2), experiment_range=range(1,4), 
+                                                      subject_range=range(6,16), experiment_range=range(1,4), 
                                                       node_retention_rate=nrr, 
                                                       subnetworks_extract='read', subnetworks_extract_basis=range(1,6),
                                                       partition_ratio=0.7,
@@ -406,7 +406,7 @@ def normal_evaluation_framework():
                                                          feature_modifier='plv', # 'plv' or 'pli'
                                                          params=params,
                                                          normalization_for_train=False, # always False
-                                                         subject_range=range(1,2), experiment_range=range(1,4),
+                                                         subject_range=range(6,16), experiment_range=range(1,4),
                                                          subnetworks_extract='separate_index', # 'separate_index' is recommended
                                                          node_retention_rate=nrr, 
                                                          subnets_extract_basis_sub=range(1,6), subnets_extract_basis_ex=range(1,4),
@@ -424,7 +424,7 @@ def normal_evaluation_framework():
                                                          feature_modifier='pli', # 'plv' or 'pli'
                                                          params=params,
                                                          normalization_for_train=False, # always False
-                                                         subject_range=range(1,2), experiment_range=range(1,4),
+                                                         subject_range=range(6,16), experiment_range=range(1,4),
                                                          subnetworks_extract='separate_index', # 'separate_index' is recommended
                                                          node_retention_rate=nrr, 
                                                          subnets_extract_basis_sub=range(1,6), subnets_extract_basis_ex=range(1,4),
