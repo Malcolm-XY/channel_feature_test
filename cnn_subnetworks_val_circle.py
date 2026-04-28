@@ -351,84 +351,84 @@ def normal_evaluation_framework():
 
     for nrr in nrr_list:
         # %% baseline: original functional networks
-        cnn_subnetworks_evaluation_circle_original_cm(feature_cm='pcc', # 'pcc', 'plv' or 'pli'
+        cnn_subnetworks_evaluation_circle_original_cm(feature_cm="pcc", # "pcc", "plv" or "pli"
                                                       normalization_for_train=False, # always False
                                                       subject_range=range(6,16), experiment_range=range(1,4), 
                                                       node_retention_rate=nrr, 
-                                                      subnetworks_extract='read', subnetworks_extract_basis=range(1,6),
-                                                      partition_ratio=0.7,
+                                                      subnetworks_extract="read", subnetworks_extract_basis=range(1,6),
+                                                      partition_ratio=0.75,
                                                       save=True) # switch to True
-        
-        cnn_subnetworks_evaluation_circle_original_cm(feature_cm='plv', # 'pcc', 'plv' or 'pli'
+
+        cnn_subnetworks_evaluation_circle_original_cm(feature_cm="plv", # "pcc", "plv" or "pli"
                                                       normalization_for_train=False, # always False
                                                       subject_range=range(6,16), experiment_range=range(1,4), 
                                                       node_retention_rate=nrr, 
-                                                      subnetworks_extract='read', subnetworks_extract_basis=range(1,6),
-                                                      partition_ratio=0.7,
+                                                      subnetworks_extract="read", subnetworks_extract_basis=range(1,6),
+                                                      partition_ratio=0.75,
                                                       save=True) # switch to True
-                
-        cnn_subnetworks_evaluation_circle_original_cm(feature_cm='pli', # 'pcc', 'plv' or 'pli'
+
+        cnn_subnetworks_evaluation_circle_original_cm(feature_cm="pli", # "pcc", "plv" or "pli"
                                                       normalization_for_train=False, # always False
                                                       subject_range=range(6,16), experiment_range=range(1,4), 
                                                       node_retention_rate=nrr, 
-                                                      subnetworks_extract='read', subnetworks_extract_basis=range(1,6),
-                                                      partition_ratio=0.7,
+                                                      subnetworks_extract="read", subnetworks_extract_basis=range(1,6),
+                                                      partition_ratio=0.75,
                                                       save=True) # switch to True
         
         # -----------------------------------------------------------------------
         
         # %% competitors: additive, multiplicative, triangle_blocking, diagonal_blocking
-        # cnn_subnetworks_evaluation_circle_feature_fusion(feature_basis='pcc', # always 'pcc'
-        #                                                  feature_modifier='plv', # 'plv' or 'pli'
-        #                                                  params={'fusion_type': 'additive', 
-        #                                                          # 'additive', 'multiplicative', 'triangle_blocking' or 'diagonal_blocking'
-        #                                                          'normalization_basis': True, # 'addtive': True; others: False
-        #                                                          'normalization_modifier': False, # always False
-        #                                                          'scale': (0, 1)},
+        # cnn_subnetworks_evaluation_circle_feature_fusion(feature_basis="pcc", # always "pcc"
+        #                                                  feature_modifier="pli", # "plv" or "pli"
+        #                                                  params={"fusion_type": "additive”", 
+        #                                                          # "additive", "multiplicative", "triangle_blocking" or "diagonal_blocking"
+        #                                                          "normalization_basis": True, # "addtive": True; others: False
+        #                                                          "normalization_modifier": False, # always False
+        #                                                          "scale": (0, 1)},
         #                                                  normalization_for_train=False, # always False 
         #                                                  subject_range=range(6,16), experiment_range=range(1,4),
-        #                                                  subnetworks_extract='unify_index', node_retention_rate=nrr,
+        #                                                  subnetworks_extract="unify_index", node_retention_rate=nrr,
         #                                                  subnets_extract_basis_sub=range(1, 6), subnets_extract_basis_ex=range(1, 4),
-        #                                                  partition_ratio=0.7,
+        #                                                  partition_ratio=0.75,
         #                                                  save=False) # switch to True
         
         # -----------------------------------------------------------------------
         
         # %% Proposed Methods: PCCxSigmoid(PLV) or PCCxSigmoid(PLI)
-        params={'fusion_type': 'sigmoid_gating', # always 'sigmoid_gating'
-                'k': None, # waiting for assignment
-                'percentile': 30, # value 30 is recommended
-                'normalization_basis': False, # True or False, depended on experiments
-                'normalization_modifier': True} # always False
+        params={"fusion_type": "sigmoid_gating", # always "sigmoid_gating"
+                "k": None, # waiting for assignment
+                "percentile": 30, # value 30 is recommended
+                "normalization_basis": False, # True or False, depended on experiments
+                "normalization_modifier": False} # always False
         
-        params['k'] = 'heaviside' # 'heaviside'or values ranges of [10, 200]
-        cnn_subnetworks_evaluation_circle_feature_fusion(feature_basis='pcc', # always 'pcc'
-                                                         feature_modifier='plv', # 'plv' or 'pli'
+        params["k"] = "heaviside" # "heaviside"or values ranges of [10, 200]
+        cnn_subnetworks_evaluation_circle_feature_fusion(feature_basis="pcc", # always "pcc"
+                                                         feature_modifier="plv", # "plv" or "pli"
                                                          params=params,
                                                          normalization_for_train=False, # always False
                                                          subject_range=range(6,16), experiment_range=range(1,4),
-                                                         subnetworks_extract='separate_index', # 'separate_index' is recommended
+                                                         subnetworks_extract="separate_index", # "separate_index" is recommended
                                                          node_retention_rate=nrr, 
                                                          subnets_extract_basis_sub=range(1,6), subnets_extract_basis_ex=range(1,4),
-                                                         partition_ratio=0.7,
+                                                         partition_ratio=0.75,
                                                          save=True) # switch to True
         
-        params={'fusion_type': 'sigmoid_gating', # always 'sigmoid_gating'
-                'k': None, # waiting for assignment
-                'percentile': 30, # value 30 is recommended
-                'normalization_basis': False, # True or False, depended on experiments
-                'normalization_modifier': True} # always False
+        params={"fusion_type": "sigmoid_gating", # always "sigmoid_gating"
+                "k": None, # waiting for assignment
+                "percentile": 30, # value 30 is recommended
+                "normalization_basis": False, # True or False, depended on experiments
+                "normalization_modifier": False} # always False
         
-        params['k'] = 'heaviside' # 'heaviside'or values ranges of [10, 200]
-        cnn_subnetworks_evaluation_circle_feature_fusion(feature_basis='pcc', # always 'pcc'
-                                                         feature_modifier='pli', # 'plv' or 'pli'
+        params["k"] = "heaviside" # "heaviside"or values ranges of [10, 200]
+        cnn_subnetworks_evaluation_circle_feature_fusion(feature_basis="pcc", # always "pcc"
+                                                         feature_modifier="pli", # "plv" or "pli"
                                                          params=params,
                                                          normalization_for_train=False, # always False
                                                          subject_range=range(6,16), experiment_range=range(1,4),
-                                                         subnetworks_extract='separate_index', # 'separate_index' is recommended
+                                                         subnetworks_extract="separate_index", # "separate_index" is recommended
                                                          node_retention_rate=nrr, 
                                                          subnets_extract_basis_sub=range(1,6), subnets_extract_basis_ex=range(1,4),
-                                                         partition_ratio=0.7,
+                                                         partition_ratio=0.75,
                                                          save=True) # switch to True
         
         # ----------------------------------------------------------------------
@@ -451,7 +451,7 @@ def normal_evaluation_framework():
         #                                                      subnetworks_extract='separate_index', # 'separate_index' is recommended
         #                                                      node_retention_rate=nrr, 
         #                                                      subnets_extract_basis_sub=range(1,6), subnets_extract_basis_ex=range(1,4),
-        #                                                      partition_ratio=0.7,
+        #                                                      partition_ratio=0.75,
         #                                                      save=True) # switch to True
         
         # ----------------------------------------------------------------------

@@ -98,7 +98,7 @@ def test_model(model, val_loader, device, criterion):
         'f1_score': f1
     }
 
-def cnn_validation(model, X, y, partition_ratio=0.7, partitioning='sequential',
+def cnn_validation(model, X, y, partition_ratio=0.75, partitioning='sequential',
                    batch_size=128, epochs=30, learning_rate=0.0005):
     """
     Perform cross-validation for a CNN model.
@@ -129,6 +129,62 @@ def cnn_validation(model, X, y, partition_ratio=0.7, partitioning='sequential',
 
         training_indices = list(range(training_len))
         testing_indices = list(range(training_len, total_len))
+
+    elif partitioning == 'randomized':
+        indices = torch.randperm(len(X_tensor))
+        training_len = int(len(X_tensor) * partition_ratio)
+        training_indices = indices[:training_len].tolist()
+        testing_indices = indices[training_len:].tolist()
+
+    else:
+        raise ValueError("Invalid partitioning method. Use 'sequential' or 'randomized'.")
+
+    train_dataset = TensorDataset(X_tensor[training_indices], y_tensor[training_indices])
+    test_dataset = TensorDataset(X_tensor[testing_indices], y_tensor[testing_indices])
+
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    criterion = torch.nn.CrossEntropyLoss()
+
+    model = train_model(model, train_loader, device, optimizer, criterion, epochs=epochs)
+    metrics = test_model(model, val_loader, device, criterion)
+
+    print(f'Validation Results: {metrics}\n')
+    return metrics
+
+def cnn_validation_reverse_division(model, X, y, partition_ratio=0.75, partitioning='sequential',
+                                    batch_size=128, epochs=30, learning_rate=0.0005):
+    """
+    Perform cross-validation for a CNN model.
+
+    Parameters:
+        model (torch.nn.Module): The model to evaluate.
+        X (array-like or torch.Tensor): 2D input data: samples x m x n or samples x channels x m x n
+        y (array-like or torch.Tensor): Labels.
+        partition_ratio (float, optional): Ratio of training to testing set. Default is 0.7.
+        partitioning (str, optional): Type of partitioning ('sequential' or 'randomized'). Default is 'sequential'.
+        batch_size (int, optional): Batch size for DataLoader. Default is 128.
+        epochs (int, optional): Number of training epochs. Default is 30.
+        learning_rate (float, optional): Learning rate for the optimizer. Default is 0.0005.
+
+    Returns:
+        dict: A dictionary containing validation metrics (accuracy, loss, recall, f1_score).
+    """
+    X_tensor = torch.as_tensor(X, dtype=torch.float32)
+    y_tensor = torch.as_tensor(y, dtype=torch.long)
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f'Running Device: {device}\n')
+
+    if partitioning == 'sequential':
+        total_len = len(X_tensor)
+        training_len = int(total_len * partition_ratio)
+        # testing_len = total_len - training_len
+        
+        training_indices = list(range(total_len - training_len, total_len))
+        testing_indices = list(range(total_len - training_len))
 
     elif partitioning == 'randomized':
         indices = torch.randperm(len(X_tensor))

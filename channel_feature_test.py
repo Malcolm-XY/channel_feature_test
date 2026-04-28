@@ -127,33 +127,7 @@ samples = np.stack([alpha,beta,gamma], axis=1)
 # len_samples, len_features = samples.shape
 # cnn_model = models.FC_2layers(input_len=len_features)
 cnn_model = models.CNN_2layers_adaptive_maxpool_3()
-
 result_CM_1 = cnn_validation.cnn_validation(cnn_model, samples, labels)
 
-# 
-feature = utils_feature_loading.read_cfs("seed", "sub1ex2", "de_lds")
-alpha, beta, gamma = feature["alpha"], feature["beta"], feature["gamma"]
-alpha, beta, gamma = [alpha] * 62, [beta] * 62, [gamma] * 62
-alpha, beta, gamma = np.stack(alpha, axis=2), np.stack(beta, axis=2), np.stack(gamma, axis=2)
-samples = np.stack([alpha,beta,gamma], axis=1)
-
-# Model
-# len_samples, len_features = samples.shape
-# cnn_model = models.FC_2layers(input_len=len_features)
 cnn_model = models.CNN_2layers_adaptive_maxpool_3()
-
-result_CM_2 = cnn_validation.cnn_validation(cnn_model, samples, labels)
-
-# 
-feature = utils_feature_loading.read_cfs("seed", "sub1ex3", "de_lds")
-alpha, beta, gamma = feature["alpha"], feature["beta"], feature["gamma"]
-alpha, beta, gamma = [alpha] * 62, [beta] * 62, [gamma] * 62
-alpha, beta, gamma = np.stack(alpha, axis=2), np.stack(beta, axis=2), np.stack(gamma, axis=2)
-samples = np.stack([alpha,beta,gamma], axis=1)
-
-# Model
-# len_samples, len_features = samples.shape
-# cnn_model = models.FC_2layers(input_len=len_features)
-cnn_model = models.CNN_2layers_adaptive_maxpool_3()
-
-result_CM_3 = cnn_validation.cnn_validation(cnn_model, samples, labels)
+result_CM_2 = cnn_validation.cnn_validation_reverse_division(cnn_model, samples, labels)
