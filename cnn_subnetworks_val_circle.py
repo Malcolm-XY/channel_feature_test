@@ -156,7 +156,11 @@ def cnn_subnetworks_evaluation_circle_original_cm(feature_cm='pcc', normalizatio
         sheet_name = f'nrr_{node_retention_rate}'
         
         save_to_xlsx_sheet(df_results, folder_name, file_name, sheet_name)
-
+        
+        # Save Summary
+        df_summary = pd.DataFrame([mean_row, std_row])
+        save_to_xlsx_sheet(df_summary, folder_name, file_name, 'summary')
+        
     return df_results
 
 import feature_fusion

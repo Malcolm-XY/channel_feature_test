@@ -13,7 +13,7 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 
 from utils import utils_feature_loading
 
-def svm_validation_compact(dataset, identifier, feature_type="psd", ratio_train=0.7, category="valence"):
+def svm_validation_compact(dataset, identifier, feature_type="psd", ratio_train=0.8, category="valence"):
     # Samples
     feature = utils_feature_loading.read_cfs(dataset, identifier, feature_type)
     alpha, beta, gamma = feature["alpha"], feature["beta"], feature["gamma"]
@@ -57,7 +57,7 @@ def svm_validation_compact_circle(feature_type, subject_range=range(6,16), exper
     
     return accuracy_avg, summary_results
 
-def svm_validation(samples, labels, ratio_train=0.7):
+def svm_validation(samples, labels, ratio_train=0.8):
     indices_train = list(range(0,int(np.ceil(ratio_train * len(samples))),1))
     indices_test = list(range(int(np.ceil(ratio_train * len(samples))), int(len(samples)), 1))
 
@@ -117,7 +117,7 @@ labels = utils_feature_loading.read_labels(dataset="seed", header=True)
 labels = torch.tensor(np.array(labels)).view(-1)
 
 # 
-feature = utils_feature_loading.read_cfs("seed", "sub1ex1", "de_lds")
+feature = utils_feature_loading.read_cfs("seed", "sub6ex1", "de_lds")
 alpha, beta, gamma = feature["alpha"], feature["beta"], feature["gamma"]
 alpha, beta, gamma = [alpha] * 62, [beta] * 62, [gamma] * 62
 alpha, beta, gamma = np.stack(alpha, axis=2), np.stack(beta, axis=2), np.stack(gamma, axis=2)
@@ -127,7 +127,7 @@ samples = np.stack([alpha,beta,gamma], axis=1)
 # len_samples, len_features = samples.shape
 # cnn_model = models.FC_2layers(input_len=len_features)
 cnn_model = models.CNN_2layers_adaptive_maxpool_3()
-result_CM_1 = cnn_validation.cnn_validation(cnn_model, samples, labels)
+result_CM_1 = cnn_validation.cnn_validation(cnn_model, samples, labels, 0.8)
 
 cnn_model = models.CNN_2layers_adaptive_maxpool_3()
-result_CM_2 = cnn_validation.cnn_validation_reverse_division(cnn_model, samples, labels)
+result_CM_2 = cnn_validation.cnn_validation_reverse_division(cnn_model, samples, labels, 0.8)
